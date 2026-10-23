@@ -37,3 +37,39 @@ export function patternUrl(kind: DayTheme['pattern'], color: string, opacity = 0
 export const paperGrain = enc(
   `<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.1 0"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>`,
 )
+
+/**
+ * Tone-on-tone embossed florals (like letterpress paper): each sprig is drawn
+ * twice, a light highlight up-left and a soft shadow down-right.
+ */
+export function embossedFlorals(light = '#FFFFFF', dark = '#000000', strength = 1): string {
+  const flower = (x: number, y: number, r: number) =>
+    [0, 72, 144, 216, 288]
+      .map((a) => {
+        const rad = (a * Math.PI) / 180
+        return `<ellipse cx="${(x + Math.cos(rad) * r).toFixed(1)}" cy="${(y + Math.sin(rad) * r).toFixed(1)}" rx="${r * 0.75}" ry="${r * 0.5}" transform="rotate(${a} ${(x + Math.cos(rad) * r).toFixed(1)} ${(y + Math.sin(rad) * r).toFixed(1)})"/>`
+      })
+      .join('') + `<circle cx="${x}" cy="${y}" r="${r * 0.35}"/>`
+  const leaf = (x: number, y: number, a: number, l: number) =>
+    `<path transform="translate(${x} ${y}) rotate(${a})" d="M0 0 Q${l / 2} ${-l * 0.32} ${l} 0 Q${l / 2} ${l * 0.32} 0 0 Z M0 0 L${l} 0"/>`
+  const sprig = [
+    '<path d="M20 230 C60 190 70 140 120 110 C150 92 170 70 178 40"/>',
+    '<path d="M120 110 C140 120 160 118 182 128"/>',
+    leaf(60, 186, -60, 22),
+    leaf(74, 160, 20, 20),
+    leaf(98, 128, -40, 20),
+    leaf(150, 120, 30, 18),
+    leaf(166, 76, -70, 18),
+    flower(178, 38, 9),
+    flower(186, 130, 7),
+    flower(36, 212, 6),
+    '<path d="M200 200 C214 190 222 176 224 160"/>',
+    leaf(214, 186, -30, 14),
+    flower(226, 156, 5),
+  ].join('')
+  const g = (stroke: string, op: number, d: number) =>
+    `<g fill="none" stroke="${stroke}" stroke-opacity="${op * strength}" stroke-width="1.1" stroke-linecap="round" transform="translate(${d} ${d})">${sprig}</g>`
+  return enc(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">${g(dark, 0.16, 0.9)}${g(light, 0.6, -0.7)}</svg>`,
+  )
+}
