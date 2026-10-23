@@ -31,6 +31,21 @@ export type EnvelopeStyle = {
   ink: string // writing on the envelope
 }
 
+/** Colours for the single-event opening scene (arch, sky, mosque, curtains, flowers). */
+export type SceneStyle = {
+  skyTop: string
+  skyBottom: string
+  glow: string // sun / light behind the dome
+  building: string // mosque in the distance
+  frame: string // carved arch frame
+  frameTrim: string
+  curtain: string
+  curtainTrim: string
+  flower: string // main rose colour
+  flower2: string // second rose colour
+  leaf: string
+}
+
 export type WeddingEvent = {
   id: 'day1' | 'day2' | 'day3'
   slug: 'nikkah' | 'barat' | 'walima' // single-event edition name (see src/config/edition.ts)
@@ -52,6 +67,7 @@ export type WeddingEvent = {
   theme: DayTheme
   outfit: { bride: BrideOutfit; groom: GroomOutfit }
   envelope: EnvelopeStyle
+  scene: SceneStyle
 }
 
 export const wedding = {
@@ -132,6 +148,19 @@ export const wedding = {
         groom: { coat: '#EADFC6', trim: '#B8902F', pants: '#F4EDDC' },
       },
       envelope: { paper: '#F6F0E2', liner: '#17533F', seal: '#1E5C45', sealInk: '#E2C46E', ink: '#17533F' },
+      scene: {
+        skyTop: '#E9D7B2',
+        skyBottom: '#FBF5E8',
+        glow: '#FFF7E2',
+        building: '#F0E4CB',
+        frame: '#F4ECDC',
+        frameTrim: '#C9A24A',
+        curtain: '#1D5A43',
+        curtainTrim: '#D9B860',
+        flower: '#FBF6EC',
+        flower2: '#EFDDBA',
+        leaf: '#AFA274',
+      },
     },
     {
       id: 'day2',
@@ -162,6 +191,19 @@ export const wedding = {
         groom: { coat: '#EBD9AE', trim: '#B8902F', pants: '#F5EEDC', turban: '#EBD9AE' },
       },
       envelope: { paper: '#6E1729', liner: '#D4AF37', seal: '#C9A23A', sealInk: '#5E1525', ink: '#F3D58A' },
+      scene: {
+        skyTop: '#5A1424',
+        skyBottom: '#EDB27A',
+        glow: '#FFE0A8',
+        building: '#D9A47C',
+        frame: '#5E1525',
+        frameTrim: '#D4AF37',
+        curtain: '#8C1026',
+        curtainTrim: '#E2BF55',
+        flower: '#C8102E',
+        flower2: '#F3D58A',
+        leaf: '#8A7A44',
+      },
     },
     {
       id: 'day3',
@@ -192,7 +234,20 @@ export const wedding = {
         bride: { dress: '#E9BCD2', top: '#DFA9C3', dupatta: '#F6DCE8', trim: '#C9A24A' },
         groom: { coat: '#3A3D42', trim: '#5B5F66', pants: '#33363B', style: 'suit', tie: '#B07AA1' },
       },
-      envelope: { paper: '#F4E3EB', liner: '#7A4A6E', seal: '#8E5A82', sealInk: '#F6DCE8', ink: '#7A4A6E' },
+      envelope: { paper: '#F4E1E8', liner: '#7A4A6E', seal: '#CBB796', sealInk: '#8C7656', ink: '#7A4A6E' },
+      scene: {
+        skyTop: '#E6C8D6',
+        skyBottom: '#FCF2F6',
+        glow: '#FFFFFF',
+        building: '#F0E0E7',
+        frame: '#F8EEF2',
+        frameTrim: '#B9977E',
+        curtain: '#A86F96',
+        curtainTrim: '#E8D3B0',
+        flower: '#F7E1EA',
+        flower2: '#E8B9CF',
+        leaf: '#9FB5A6',
+      },
     },
   ] satisfies WeddingEvent[] as WeddingEvent[],
 
