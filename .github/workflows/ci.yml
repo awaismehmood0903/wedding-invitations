@@ -1,0 +1,56 @@
+# Checks every change before it can go live.
+#
+#   push to Awais-branch  → type-check + build all four editions
+#   pull request → main   → same checks, shown on the PR before you merge
+#   push to main          → same checks; Render deploys only once they pass
+#                           (autoDeployTrigger: checksPass in render.yaml)
+
+name: CI
+
+on:
+  push:
+    branches: [main, Awais-branch]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  typecheck:
+    name: Type check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx tsc -p tsconfig.json
+
+  build:
+    name: Build (${{ matrix.edition }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        edition: [full, nikkah, barat, walima]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Build
+        run: npx vite build ${{ matrix.edition != 'full' && format('--mode {0}', matrix.edition) || '' }}
+      - name: Check the page and preview image are in the build
+        run: |
+          test -f dist/index.html
+          grep -q '<title>' dist/index.html
+          ! grep -q '%TITLE%' dist/index.html
+          img=$([ "${{ matrix.edition }}" = full ] && echo og-image.jpg || echo og-${{ matrix.edition }}.jpg)
+          test -f "dist/$img"
+          echo "OK: $(grep -o '<title>[^<]*</title>' dist/index.html)"
