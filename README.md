@@ -60,7 +60,13 @@ outfit colours, envelope colours and contacts. Search the file for `TODO` to fin
 3. If Render gives a site a different URL, or you attach a custom domain, set that site's **`VITE_SITE_URL`** to the
    real address (in its Environment tab or in `render.yaml`) and redeploy. WhatsApp needs it for the preview image.
 
-Every push to the main branch redeploys all four, so a design change reaches every invitation.
+## CI/CD
+
+1. Push changes to `Awais-branch`. GitHub Actions (`.github/workflows/ci.yml`) type-checks the code and builds all four editions.
+2. Open a pull request into `main`. The same checks run on it, and you'll see a green tick or a red cross before you merge.
+3. Merge. The checks run once more on `main`, and Render deploys all four sites only after they pass (`autoDeployTrigger: checksPass` in `render.yaml`).
+
+If a check fails, nothing is deployed and the live sites keep running the previous version.
 
 ## Assets
 

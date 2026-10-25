@@ -5,6 +5,9 @@
 # If Render gives a site a different URL than the one below, update that site's
 # VITE_SITE_URL in its Environment tab and redeploy, so the WhatsApp preview
 # image points at the right address.
+#
+# Deploys: every push to main deploys all four sites automatically, but only after
+# the GitHub Actions checks in .github/workflows/ci.yml pass (autoDeployTrigger: checksPass).
 
 services:
   # 1. Full invitation: all three days
@@ -14,6 +17,8 @@ services:
     buildCommand: npm ci && npm run build
     staticPublishPath: ./dist
     pullRequestPreviewsEnabled: false
+    branch: main
+    autoDeployTrigger: checksPass
     routes:
       - type: rewrite
         source: /*
@@ -35,6 +40,8 @@ services:
     buildCommand: npm ci && npm run build:nikkah
     staticPublishPath: ./dist
     pullRequestPreviewsEnabled: false
+    branch: main
+    autoDeployTrigger: checksPass
     routes:
       - type: rewrite
         source: /*
@@ -56,6 +63,8 @@ services:
     buildCommand: npm ci && npm run build:barat
     staticPublishPath: ./dist
     pullRequestPreviewsEnabled: false
+    branch: main
+    autoDeployTrigger: checksPass
     routes:
       - type: rewrite
         source: /*
@@ -77,6 +86,8 @@ services:
     buildCommand: npm ci && npm run build:walima
     staticPublishPath: ./dist
     pullRequestPreviewsEnabled: false
+    branch: main
+    autoDeployTrigger: checksPass
     routes:
       - type: rewrite
         source: /*

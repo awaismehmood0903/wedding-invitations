@@ -142,7 +142,13 @@ function Lantern({ x, y, len, c, className }: { x: number; y: number; len: numbe
     <g className={className}>
       <line x1={x} y1={y} x2={x} y2={y + len} stroke={shade(metal, -0.2)} strokeWidth="0.9" />
       <g transform={`translate(${x} ${y + len})`}>
-        <circle className="lantern-glow" cx="0" cy="22" r="30" fill={c.glow} opacity="0.55" style={{ filter: 'blur(6px)' }} />
+        <defs>
+          <radialGradient id={className + '-glow'}>
+            <stop offset="0" stopColor={c.glow} stopOpacity="0.9" />
+            <stop offset="1" stopColor={c.glow} stopOpacity="0" />
+          </radialGradient>
+        </defs>
+        <circle className="lantern-glow" cx="0" cy="22" r="36" fill={'url(#' + className + '-glow)'} opacity="0.55" />
         <path d="M-7 0 Q0 -8 7 0 Z" fill={metal} />
         <rect x="-9" y="0" width="18" height="3" fill={metal} />
         <path d="M-9 3 L-11 32 L11 32 L9 3 Z" fill="#FFE7A8" opacity="0.92" />
@@ -169,17 +175,18 @@ export function WeddingScene({ event: e, start }: { event: WeddingEvent; start: 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       if (reduced) return
-      gsap.set('.scene-stage', { autoAlpha: 0, y: '16vh' })
+      gsap.set('.scene-stage', { opacity: 0.01, y: '16vh' })
       gsap.set('.scene-couple', { autoAlpha: 0 })
       gsap.set('.scene-cue', { autoAlpha: 0 })
       if (!start) return
 
       const q = gsap.utils.selector(ref)
       const tl = gsap.timeline()
-      tl.to('.scene-stage', { autoAlpha: 1, y: 0, duration: 1.05, ease: 'power2.out' }, 0)
+      tl.to('.scene-stage', { opacity: 1, y: 0, duration: 1.05, ease: 'power2.out' }, 0)
       // curtains draw back into tied drapes
-      q('.curtain-shape').forEach((el) => tl.to(el, { attr: { d: el.getAttribute('data-open') ?? '' }, duration: 1.6, ease: 'power2.inOut' }, 0.35))
-      tl.to('.curtain-tie', { opacity: 1, duration: 0.5, ease: 'power1.out' }, 1.5)
+      tl.to('.curtain-closed', { scaleX: 0.34, duration: 1.3, ease: 'power2.inOut' }, 0.35)
+        .to('.curtain-open', { opacity: 1, duration: 0.5, ease: 'power1.out' }, 1.1)
+        .to('.curtain-closed', { opacity: 0, duration: 0.45, ease: 'power1.in' }, 1.25)
       tl.fromTo('.lantern-glow', { opacity: 0 }, { opacity: 0.55, duration: 1.2 }, 0.6)
         // the couple walk in, from close to the viewer toward the mosque
         .fromTo('.scene-couple', { autoAlpha: 0, y: 60, scale: 1.2, transformOrigin: '50% 100%' }, { autoAlpha: 1, y: 0, scale: 1, duration: 2.4, ease: 'power2.out' }, 0.75)
@@ -196,9 +203,6 @@ export function WeddingScene({ event: e, start }: { event: WeddingEvent; start: 
       gsap.to('.cb-veil', { skewX: -2.5, transformOrigin: '20% 0%', duration: 2.6, ease: 'sine.inOut', yoyo: true, repeat: -1 })
       gsap.to('.cb-skirt', { rotation: 1.2, transformOrigin: '50% 0%', duration: 1.8, ease: 'sine.inOut', yoyo: true, repeat: -1 })
       gsap.to('.cb-shamla', { skewX: 4, transformOrigin: '50% 0%', duration: 2.2, ease: 'sine.inOut', yoyo: true, repeat: -1 })
-      gsap.to('.scene-cloud', { x: 26, duration: 14, ease: 'sine.inOut', yoyo: true, repeat: -1, stagger: 2 })
-      gsap.to('.scene-shimmer', { x: 12, opacity: 0.2, duration: 2.4, ease: 'sine.inOut', yoyo: true, repeat: -1, stagger: 0.4 })
-      gsap.to('.scene-cluster', { rotation: 1.4, transformOrigin: '0% 0%', duration: 3.2, ease: 'sine.inOut', yoyo: true, repeat: -1, stagger: 0.6 })
     }, ref)
     return () => ctx.revert()
   }, [start, reduced])
@@ -214,7 +218,7 @@ export function WeddingScene({ event: e, start }: { event: WeddingEvent; start: 
       }}
       aria-label={`${e.title} of ${groom} and ${bride}`}
     >
-      <div className="scene-stage absolute inset-0 flex items-center justify-center">
+      <div className="scene-stage absolute inset-0 flex items-center justify-center will-change-transform">
         <div className="relative shrink-0 w-[max(100vw,calc(100svh*400/860))] sm:w-[min(100vw,calc(100svh*400/860))]" style={{ aspectRatio: `${W} / ${H}` }}>
           <svg viewBox={`0 0 ${W} ${H}`} className="absolute inset-0 h-full w-full" aria-hidden>
             <defs>
@@ -285,12 +289,6 @@ export function WeddingScene({ event: e, start }: { event: WeddingEvent; start: 
               <line key={y} x1={90 - ((y - 660) * 40) / 200} x2={310 + ((y - 660) * 40) / 200} y1={y} y2={y} stroke={shade(c.building, -0.15)} strokeWidth="0.5" opacity="0.5" />
             ))}
 
-            {/* the couple */}
-            <g transform="translate(112 520) scale(0.86)">
-              <g className="scene-couple">
-                <CoupleBack groom={e.outfit.groom} bride={e.outfit.bride} />
-              </g>
-            </g>
 
             {/* carved arch frame */}
             <path d={`M0 0 H${W} V${H} H0 Z ${opening}`} fillRule="evenodd" fill="url(#scene-frame)" />
@@ -323,6 +321,15 @@ export function WeddingScene({ event: e, start }: { event: WeddingEvent; start: 
               <Cluster c={c} className="scene-cluster" transform="translate(-10 -10) scale(1.35)" />
             </g>
           </svg>
+
+          {/* the couple, on their own layer so their walk-in doesn't repaint the whole scene */}
+          <div className="scene-couple absolute will-change-transform" style={{ left: '25%', top: '55.81%', width: '52.5%', height: '36.05%' }}>
+            <svg viewBox="100 480 210 310" className="h-full w-full overflow-visible" aria-hidden>
+              <g transform="translate(112 520) scale(0.86)">
+                <CoupleBack groom={e.outfit.groom} bride={e.outfit.bride} />
+              </g>
+            </svg>
+          </div>
 
         </div>
       </div>

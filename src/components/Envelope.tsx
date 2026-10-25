@@ -34,7 +34,11 @@ export function Envelope({ event: e, guest, onReveal, onDone }: Props) {
   // Wait for fonts so the seal's monogram never flashes in a fallback face.
   useEffect(() => {
     let alive = true
-    Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 3000))]).then(() => alive && setReady(true))
+    Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 3000))]).then(() => {
+      if (!alive) return
+      setReady(true)
+      music.preload()
+    })
     return () => {
       alive = false
     }
@@ -98,13 +102,13 @@ export function Envelope({ event: e, guest, onReveal, onDone }: Props) {
         onClick={open}
         onKeyDown={(ev) => (ev.key === 'Enter' || ev.key === ' ') && (ev.preventDefault(), open())}
         aria-label={`Open the ${e.title} invitation`}
-        className="env-body invisible absolute inset-0 cursor-pointer [perspective:1400px]"
+        className="env-body invisible absolute inset-0 cursor-pointer will-change-transform [perspective:1400px]"
       >
         {/* inside of the envelope */}
         <div className="absolute inset-0" style={{ ...paper, backgroundColor: shade(env.paper, -0.12) }} />
 
         {/* the card inside */}
-        <div className="env-card absolute top-[10%] bottom-0 left-1/2 z-[2] w-[min(84%,520px)] -translate-x-1/2 rounded-t-md shadow-[0_-6px_20px_rgba(0,0,0,0.12)]" style={{ backgroundColor: e.theme.card, backgroundImage: paperGrain }}>
+        <div className="env-card will-change-transform absolute top-[10%] bottom-0 left-1/2 z-[2] w-[min(84%,520px)] -translate-x-1/2 rounded-t-md shadow-[0_-6px_20px_rgba(0,0,0,0.12)]" style={{ backgroundColor: e.theme.card, backgroundImage: paperGrain }}>
           <div className="absolute inset-x-[6%] top-[4%] bottom-0 rounded-t border border-b-0" style={{ borderColor: `${e.theme.accent}99` }} />
           <p className="font-script absolute inset-x-0 top-[9%] text-center text-[clamp(2rem,9vw,3.4rem)]" style={{ color: e.theme.primary }}>
             {e.title}
@@ -138,7 +142,7 @@ export function Envelope({ event: e, guest, onReveal, onDone }: Props) {
         </svg>
 
         {/* top flap: embossed paper outside, patterned liner inside */}
-        <div className="env-flap absolute inset-x-0 top-0 z-[4] origin-top [transform-style:preserve-3d]" style={{ height: `${FLAP}%` }}>
+        <div className="env-flap absolute inset-x-0 top-0 z-[4] origin-top will-change-transform [transform-style:preserve-3d]" style={{ height: `${FLAP}%` }}>
           <div className="absolute inset-0 [backface-visibility:hidden]" style={{ ...paper, backgroundColor: shade(env.paper, 0.03), clipPath: 'polygon(0 0, 100% 0, 50% 100%)' }} />
           <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute inset-0 h-full w-full [backface-visibility:hidden]" aria-hidden>
             <polyline points="0,0 50,100 100,0" fill="none" stroke={shade(env.paper, -0.2)} strokeWidth="0.8" vectorEffect="non-scaling-stroke" />
