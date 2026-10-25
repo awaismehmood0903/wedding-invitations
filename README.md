@@ -8,7 +8,7 @@ One codebase builds **four separate invitations**, each deployed as its own site
 | Edition | Build command | What guests see |
 | --- | --- | --- |
 | **Full** | `npm run build` | Monogram loader → ornate doors → names and couple → greeting → all three days → countdown → contacts |
-| **Nikkah** | `npm run build:nikkah` | Zoomed-in envelope with an H & S wax seal → it opens and the card slides out → invitation card → wish and details → countdown → the couple in Nikkah outfits → contacts |
+| **Nikkah** | `npm run build:nikkah` | Full-screen embossed envelope with an H & S wax seal → it opens and glides away → curtains part on a Mughal arch, mosque and the couple walking in → names → details → countdown → wish and contacts |
 | **Barat** | `npm run build:barat` | The same flow in maroon and gold, with Barat outfits |
 | **Walima** | `npm run build:walima` | The same flow in blush and plum, with Walima outfits |
 
@@ -90,9 +90,10 @@ Google Sheets formula to build links from a guest list (name in A2):
 ## Characters
 
 - **Full edition:** flat illustrated bride and groom (`Character.tsx`).
-- **Single-event editions:** semi-realistic bride and groom (`CharacterRealistic.tsx`) with shaded skin and fabric,
-  detailed faces, embroidery, jewellery, mehndi, and a dupatta that sways. Both styles share the same animations:
-  blinking, breathing, walking in, waving and holding hands.
+- **Single-event editions:** the opening scene (`components/scene/WeddingScene.tsx`) shows the couple from behind,
+  hand in hand, walking toward a mosque inside a carved arch with lanterns, roses and parting curtains
+  (`CoupleBack.tsx`). Its colours come from each event's `scene` settings in `event.ts`.
+- `CharacterRealistic.tsx` holds an alternative front-facing, semi-realistic couple (`look="real"` on `Couple`).
 
 To use a professionally made Rive file instead, put it at `public/rive/couple.riv` and set `rive.src` in
 `src/config/event.ts`. Brief your illustrator for a state machine named **`Couple`** with number inputs
