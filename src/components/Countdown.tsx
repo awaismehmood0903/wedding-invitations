@@ -17,7 +17,7 @@ export function Countdown({ events }: { events: WeddingEvent[] }) {
   const left = useCountdown(target)
 
   return (
-    <section ref={ref} className="relative z-10 px-5 py-24 text-center text-ink" aria-labelledby="countdown-title">
+    <section ref={ref} className="relative z-10 px-4 py-10 text-center text-ink sm:px-5 sm:py-24" aria-labelledby="countdown-title">
       {!next || !left ? (
         <p className="reveal font-script text-5xl text-primary">Alhamdulillah — thank you for celebrating with us</p>
       ) : (
@@ -27,7 +27,7 @@ export function Countdown({ events }: { events: WeddingEvent[] }) {
             {next.title}
           </h2>
           {!left.done && (
-            <div className="reveal mx-auto mt-10 grid max-w-md grid-cols-4 gap-2.5 sm:gap-4" role="timer" aria-live="off">
+            <div className="reveal mx-auto mt-6 grid max-w-md grid-cols-4 gap-2.5 sm:gap-4" role="timer" aria-live="off">
               <Tile value={left.days} label="Days" />
               <Tile value={left.hours} label="Hours" />
               <Tile value={left.minutes} label="Minutes" />

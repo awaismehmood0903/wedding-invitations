@@ -28,12 +28,12 @@ export function Footer() {
   }
 
   return (
-    <footer ref={ref} className="relative z-10 px-5 pt-16 pb-14 text-center text-ink">
+    <footer ref={ref} className="relative z-10 px-4 pt-8 pb-8 text-center text-ink sm:px-5 sm:pt-16 sm:pb-14">
       <Monogram className="reveal mx-auto w-24 text-primary" />
       <p className="reveal font-display mt-6 text-2xl font-semibold tracking-wide text-primary">{hashtag}</p>
       <p className="reveal mt-2 text-sm opacity-80">Share your moments with our hashtag</p>
 
-      <ul className="reveal mx-auto mt-10 grid max-w-sm gap-3">
+      <ul className="reveal mx-auto mt-6 grid max-w-sm gap-3 sm:mt-10">
         {wedding.contacts.map((c) => (
           <li key={c.name} className="flex items-center justify-between gap-3 rounded-2xl border border-accent/30 bg-card px-4 py-3 text-left">
             <span>
@@ -56,14 +56,14 @@ export function Footer() {
         ))}
       </ul>
 
-      <div className="reveal mt-10 flex items-center justify-center gap-3">
+      <div className="reveal mt-6 flex items-center justify-center gap-3 sm:mt-10">
         <button type="button" onClick={share} className="btn btn-solid">
           {copied ? 'Link copied!' : 'Share invitation'}
         </button>
         <MusicToggle />
       </div>
 
-      <p className="mt-12 text-xs tracking-[0.25em] uppercase opacity-60">
+      <p className="mt-8 text-xs tracking-[0.25em] uppercase opacity-60">
         With love · {groom} &amp; {bride} · {new Date(`${wedding.events[0].date}T00:00:00`).getFullYear()}
       </p>
     </footer>
