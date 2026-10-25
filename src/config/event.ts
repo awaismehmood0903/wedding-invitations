@@ -44,6 +44,7 @@ export type SceneStyle = {
   flower: string // main rose colour
   flower2: string // second rose colour
   leaf: string
+  blossom: string // small accent flowers in the floral border and rose bushes
 }
 
 export type WeddingEvent = {
@@ -160,6 +161,7 @@ export const wedding = {
         flower: '#F7E7D6',
         flower2: '#E3AE7C',
         leaf: '#9C9468',
+        blossom: '#5E7E9C',
       },
     },
     {
@@ -203,6 +205,7 @@ export const wedding = {
         flower: '#C8102E',
         flower2: '#F3D58A',
         leaf: '#8A7A44',
+        blossom: '#F6E3B4',
       },
     },
     {
@@ -247,6 +250,7 @@ export const wedding = {
         flower: '#F7E1EA',
         flower2: '#E8B9CF',
         leaf: '#9FB5A6',
+        blossom: '#8DA4C4',
       },
     },
   ] satisfies WeddingEvent[] as WeddingEvent[],
