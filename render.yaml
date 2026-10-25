@@ -2,61 +2,91 @@
 # Render dashboard → New → Blueprint → choose this repository → Apply.
 #
 # Each site builds a different edition (see src/config/edition.ts).
-# If Render gives a site a different URL than the one below (e.g. adds a suffix),
-# update that site's VITE_SITE_URL here or in its Environment tab and redeploy,
-# so the WhatsApp preview image points at the right address.
-
-x-static: &static
-  type: web
-  runtime: static
-  staticPublishPath: ./dist
-  pullRequestPreviewsEnabled: false
-  routes:
-    - type: rewrite
-      source: /*
-      destination: /index.html
-  headers:
-    - path: /assets/*
-      name: Cache-Control
-      value: public, max-age=31536000, immutable
+# If Render gives a site a different URL than the one below, update that site's
+# VITE_SITE_URL in its Environment tab and redeploy, so the WhatsApp preview
+# image points at the right address.
 
 services:
   # 1. Full invitation: all three days
-  - <<: *static
+  - type: web
+    runtime: static
     name: hasher-weds-samar
     buildCommand: npm ci && npm run build
+    staticPublishPath: ./dist
+    pullRequestPreviewsEnabled: false
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
     envVars:
       - key: NODE_VERSION
-        value: '22'
+        value: "22"
       - key: VITE_SITE_URL
         value: https://hasher-weds-samar.onrender.com
 
   # 2. Nikkah only
-  - <<: *static
+  - type: web
+    runtime: static
     name: hasher-samar-nikkah
     buildCommand: npm ci && npm run build:nikkah
+    staticPublishPath: ./dist
+    pullRequestPreviewsEnabled: false
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
     envVars:
       - key: NODE_VERSION
-        value: '22'
+        value: "22"
       - key: VITE_SITE_URL
         value: https://hasher-samar-nikkah.onrender.com
 
   # 3. Barat only
-  - <<: *static
+  - type: web
+    runtime: static
     name: hasher-samar-barat
     buildCommand: npm ci && npm run build:barat
+    staticPublishPath: ./dist
+    pullRequestPreviewsEnabled: false
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
     envVars:
       - key: NODE_VERSION
-        value: '22'
+        value: "22"
       - key: VITE_SITE_URL
         value: https://hasher-samar-barat.onrender.com
 
   # 4. Walima only
-  - <<: *static
+  - type: web
+    runtime: static
     name: hasher-samar-walima
     buildCommand: npm ci && npm run build:walima
+    staticPublishPath: ./dist
+    pullRequestPreviewsEnabled: false
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
     envVars:
       - key: NODE_VERSION
-        value: '22'
+        value: "22"
       - key: VITE_SITE_URL
         value: https://hasher-samar-walima.onrender.com
