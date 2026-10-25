@@ -1,0 +1,201 @@
+@import 'tailwindcss';
+
+/* Per-section theme tokens. Each section sets --bg/--primary/--accent/--ink/--card
+   inline from src/config/event.ts; these utilities read them. */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-primary: var(--primary);
+  --color-accent: var(--accent);
+  --color-ink: var(--ink);
+  --color-card: var(--card);
+
+  --font-display: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  --font-script: 'Great Vibes', 'Cormorant Garamond', cursive;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-arabic: 'Amiri', 'Noto Naskh Arabic', serif;
+  --font-urdu: 'Noto Nastaliq Urdu', 'Amiri', serif;
+}
+
+:root {
+  --bg: #fbf5ea;
+  --primary: #7a1f2b;
+  --accent: #b8902f;
+  --ink: #3b2a22;
+  --card: #fffdf8;
+  color-scheme: light;
+}
+
+html {
+  background: var(--bg);
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  background: #fbf5ea;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+@layer components {
+  /* Decorative thin gold rule with a diamond in the middle */
+  .ornament {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--accent);
+  }
+  .ornament::before,
+  .ornament::after {
+    content: '';
+    height: 1px;
+    flex: 1;
+    background: linear-gradient(90deg, transparent, currentColor, transparent);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    padding: 0.6rem 1.15rem;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    transition:
+      transform 0.2s ease,
+      opacity 0.2s ease;
+  }
+  .btn:active {
+    transform: scale(0.97);
+  }
+  .btn-solid {
+    background: var(--primary);
+    color: var(--bg);
+  }
+  .btn-ghost {
+    border: 1px solid color-mix(in srgb, var(--primary) 45%, transparent);
+    color: var(--primary);
+  }
+
+  .field {
+    width: 100%;
+    min-height: 44px;
+    padding: 0.65rem 0.9rem;
+    border-radius: 0.75rem;
+    border: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
+    background: color-mix(in srgb, var(--card) 85%, white);
+    color: var(--ink);
+    font: inherit;
+  }
+  .field:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Loader: monogram strokes draw themselves, then the fill fades in */
+.monogram-draw .mg-stroke {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: mg-draw 1.6s ease-in-out forwards;
+}
+.monogram-draw .mg-text {
+  fill-opacity: 0;
+  stroke-dasharray: 420;
+  stroke-dashoffset: 420;
+  animation:
+    mg-draw 1.8s 0.3s ease-in-out forwards,
+    mg-fill 0.8s 1.7s ease forwards;
+}
+.monogram-draw .mg-fade {
+  opacity: 0;
+  animation: mg-fill 0.8s 1.2s ease forwards;
+}
+@keyframes mg-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes mg-fill {
+  to {
+    fill-opacity: 1;
+    opacity: 1;
+  }
+}
+
+@keyframes seal-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+}
+.seal-pulse {
+  animation: seal-pulse 2.2s ease-in-out infinite;
+}
+
+@keyframes scroll-cue {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(14px);
+    opacity: 0;
+  }
+}
+.scroll-cue {
+  animation: scroll-cue 1.8s ease-in-out infinite;
+}
+
+@keyframes eq {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+.eq-bar {
+  height: 100%;
+  transform-origin: bottom;
+  animation: eq 0.9s ease-in-out infinite;
+}
