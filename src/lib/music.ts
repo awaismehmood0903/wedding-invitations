@@ -12,6 +12,10 @@ const set = (patch: Partial<State>) => {
 }
 
 export const music = {
+  /** Fetch the audio library ahead of time so the tap that starts the music has no delay. */
+  preload() {
+    void import('howler')
+  },
   get: () => state,
   subscribe(fn: (s: State) => void) {
     listeners.add(fn)

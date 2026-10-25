@@ -15,7 +15,9 @@ export function Petals({ count = 26, active = true }: { count?: number; active?:
     if (!c || reduced || !active) return
     const ctx = c.getContext('2d')
     if (!ctx) return
-    const dpr = Math.min(window.devicePixelRatio || 1, 2)
+    // Phones: lower pixel density and fewer petals keep the canvas cheap.
+    const small = window.innerWidth < 640
+    const dpr = Math.min(window.devicePixelRatio || 1, small ? 1.25 : 2)
     let w = 0
     let h = 0
     const resize = () => {
@@ -41,7 +43,7 @@ export function Petals({ count = 26, active = true }: { count?: number; active?:
       color: COLORS[Math.floor(Math.random() * COLORS.length)],
       kind: Math.random() < 0.75 ? 0 : 1,
     })
-    const petals = Array.from({ length: count }, () => spawn(true))
+    const petals = Array.from({ length: small ? Math.ceil(count * 0.6) : count }, () => spawn(true))
 
     let raf = 0
     let t = 0

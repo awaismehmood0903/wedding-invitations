@@ -152,6 +152,8 @@ export function GateIntro({ guest, onOpen, onGone }: { guest: string; onOpen: ()
   const y = (v: number) => `${(v / H) * 100}%`
   const lockY = TIP + drop + 122
 
+  useEffect(() => music.preload(), [])
+
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo('.gate-stage', { autoAlpha: 0, scale: 1.04 }, { autoAlpha: 1, scale: 1, duration: 1, ease: 'power2.out' })
@@ -211,7 +213,7 @@ export function GateIntro({ guest, onOpen, onGone }: { guest: string; onOpen: ()
 
   return (
     <div ref={root} className={`fixed inset-0 z-40 overflow-hidden ${opening ? 'pointer-events-none' : ''}`}>
-      <div className="gate-stage invisible absolute inset-0">
+      <div className="gate-stage invisible absolute inset-0 will-change-transform">
         {/* golden light behind the doors */}
         <div
           className="gate-light invisible absolute left-1/2 -translate-x-1/2 rounded-full"
@@ -227,7 +229,7 @@ export function GateIntro({ guest, onOpen, onGone }: { guest: string; onOpen: ()
           style={{ left: x(W / 2 - half), width: x(half * 2), top: y(TIP), bottom: y(H - FLOOR) }}
         >
           {(['l', 'r'] as const).map((s) => (
-            <span key={s} className={`gate-door-${s} absolute top-0 bottom-0 block w-1/2 ${s === 'l' ? 'left-0 origin-left' : 'right-0 origin-right'}`} style={{ transformStyle: 'preserve-3d' }}>
+            <span key={s} className={`gate-door-${s} absolute top-0 bottom-0 block w-1/2 will-change-transform ${s === 'l' ? 'left-0 origin-left' : 'right-0 origin-right'}`} style={{ transformStyle: 'preserve-3d' }}>
               <span className={`block h-full w-full ${s === 'r' ? '-scale-x-100' : ''}`}>
                 <DoorLeaf id={`gate-${s}`} lw={half} lh={FLOOR - TIP} s={drop} />
               </span>
